@@ -1,7 +1,7 @@
 # --- Web framework ---
 fastapi==0.115.0
 uvicorn[standard]==0.30.6
-python-multipart==0.0.9        # required for UploadFile (POST /api/detections/analyze)
+python-multipart==0.0.9
 websockets==13.1
 
 # --- Settings / config ---
@@ -11,21 +11,22 @@ pydantic-settings==2.5.2
 # --- Database ---
 sqlalchemy==2.0.35
 alembic==1.13.2
-psycopg2-binary==2.9.9         # PostgreSQL driver (matches DATABASE_URL in core/config.py)
+psycopg2-binary==2.9.9
 
 # --- Auth / security ---
 python-jose[cryptography]==3.3.0
-passlib[bcrypt]==1.7.4
+bcrypt==4.2.0
 
 # --- Computer vision pipeline (app/cv) ---
-mediapipe==0.10.14             # Pre-built wheels — no C++ compiler needed (dlib replacement)
+mediapipe==0.10.14
 opencv-python-headless==4.10.0.84
-numpy==1.26.4
+numpy<2.0.0,>=1.26.0
 
-# --- Notifications (app/services/notification.py) ---
-twilio==9.3.2                  # SMS escalation; omit if SMS alerts aren't needed
+# --- System monitoring ---
+psutil>=5.9.0
 
 # --- Testing ---
 pytest==8.3.3
 pytest-asyncio==0.24.0
-httpx==0.27.2                  # TestClient / async API testing
+httpx==0.27.2
+
