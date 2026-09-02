@@ -15,17 +15,6 @@ export const AdminShell: React.FC<AdminShellProps> = ({ children }) => {
   const [isDark, setIsDark] = useState(true);
   const toast = useToast();
 
-  // Read stored user info
-  const token    = localStorage.getItem('vc_access_token');
-  const role     = localStorage.getItem('vc_role') ?? '';
-  const name     = localStorage.getItem('vc_nurse_name') ?? 'Admin';
-
-  // Protect admin routes
-  if (!token) return <Navigate to="/login" replace />;
-  if (!['super_admin', 'hospital_admin'].includes(role)) {
-    return <Navigate to="/dashboard" replace />;
-  }
-
   // Apply dark class on root
   useEffect(() => {
     document.documentElement.classList.toggle('dark', isDark);
@@ -38,6 +27,17 @@ export const AdminShell: React.FC<AdminShellProps> = ({ children }) => {
       }
     },
   });
+
+  // Read stored user info
+  const token = localStorage.getItem('vc_access_token');
+  const role  = localStorage.getItem('vc_role') ?? '';
+  const name  = localStorage.getItem('vc_nurse_name') ?? 'Admin';
+
+  // Protect admin routes
+  if (!token) return <Navigate to="/login" replace />;
+  if (!['super_admin', 'hospital_admin'].includes(role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div className={`min-h-screen flex ${isDark ? 'dark bg-slate-950' : 'bg-slate-100'}`}>
