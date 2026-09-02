@@ -1,14 +1,9 @@
 import React, { useState } from "react";
 import {
-  Settings,
-  Eye,
-  Activity,
   Sliders,
   Mail,
-  MessageSquare,
   Camera,
   User,
-  Shield,
   Save,
   CheckCircle,
 } from "lucide-react";

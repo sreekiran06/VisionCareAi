@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { patientsApi } from "../../services/api";
 import { Patient } from "../../types";
-import { Video, RefreshCw, Users, AlertCircle, Play, Eye } from "lucide-react";
+import { Video, RefreshCw, Users, Play } from "lucide-react";
 import { ConditionBadge } from "../../components/UI/Badge";
 
 export const MonitoringPage: React.FC = () => {
