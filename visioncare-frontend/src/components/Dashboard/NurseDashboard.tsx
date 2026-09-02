@@ -42,13 +42,15 @@ import {
 import { StatCard } from "../UI/StatCard";
 import { NeedBadge, StatusBadge, GestureBadge, ConnectionBadge } from "../UI/Badge";
 
+import { getWebSocketBaseUrl } from "../../utils/wsUrl";
+
 interface NurseDashboardProps {
   wardId: string;
   nurseId: string;
   nurseName?: string;
 }
 
-const WS_BASE_URL = process.env.REACT_APP_WS_URL ?? "ws://localhost:8001";
+const WS_BASE_URL = getWebSocketBaseUrl();
 
 function mapDetectionToRequest(raw: any): PatientRequest {
   return {

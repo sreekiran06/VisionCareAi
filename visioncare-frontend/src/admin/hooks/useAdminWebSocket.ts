@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { getWebSocketBaseUrl } from '../../utils/wsUrl';
 
 type WsEvent = {
   type: string;
@@ -11,7 +12,7 @@ type WsOptions = {
   onDisconnect?: () => void;
 };
 
-const WS_BASE = process.env.REACT_APP_WS_URL ?? 'ws://localhost:8000';
+const WS_BASE = getWebSocketBaseUrl();
 
 export function useAdminWebSocket(options: WsOptions = {}) {
   const [isConnected, setIsConnected] = useState(false);

@@ -64,7 +64,7 @@ historical queries; WebSockets (`/ws/*`) handle the real-time path.
 
 ---
 
-## 🚀 Quick Start (Windows)
+## 🚀 Quick Start (Local Run)
 
 ### Prerequisites
 - Python 3.10+ with `pip`
@@ -74,44 +74,40 @@ historical queries; WebSockets (`/ws/*`) handle the real-time path.
 ### 1 — Clone & install dependencies
 
 ```powershell
-git clone https://github.com/ManoharGoud27/visioncare_AI.git
-cd visioncare_AI
-.\install_deps.bat
+git clone https://github.com/sreekiran06/VisionCareAi.git
+cd VisionCareAi
 ```
 
-### 2 — Install MediaPipe (face landmark detection)
-
-> ⚠️ **Stop the backend first** before running this.
+### 2 — Run All (One-Click)
 
 ```powershell
-.\install_mediapipe.bat
+.\run_project.bat
 ```
 
-### 3 — Start the backend
+Or manually:
 
+**Backend:**
 ```powershell
-.\start_backend.bat
-# OR manually:
 cd backend
-.venv\Scripts\uvicorn.exe app.main:app --host 0.0.0.0 --port 8001
+python -m uvicorn app.main:app --reload --port 8000
 ```
 
-Look for this line to confirm real face detection is active:
-```
-Initialized MediaPipe FaceMesh. Running in Real Mode (MediaPipe Fallback).
-```
-
-### 4 — Start the frontend
-
+**Frontend:**
 ```powershell
-.\start_frontend.bat
-# OR manually:
 cd visioncare-frontend
-npm install
 npm start
 ```
 
-Open → **http://localhost:3000**
+- Frontend: **http://localhost:3000**
+- Backend API Docs: **http://localhost:8000/docs**
+
+---
+
+### Default Credentials
+| Role | Email | Password |
+|---|---|---|
+| Super Admin | `admin@visioncare.com` | `admin123` |
+| Nurse | `nurse@visioncare.com` | `password123` |
 
 ---
 

@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import { ConnectionStatus } from "../../types";
+import { getWebSocketBaseUrl } from "../../utils/wsUrl";
 
 interface CameraFeedProps {
   patientId: string;
@@ -9,7 +10,7 @@ interface CameraFeedProps {
   onStatusChange?: (status: ConnectionStatus) => void;
 }
 
-const DEFAULT_WS_URL = process.env.REACT_APP_WS_URL ?? "ws://localhost:8001";
+const DEFAULT_WS_URL = getWebSocketBaseUrl();
 
 /**
  * Streams JPEG frames from the bedside camera to the backend gesture
