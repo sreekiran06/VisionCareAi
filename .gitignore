@@ -1,0 +1,54 @@
+# ========================
+# Python / Backend
+# ========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.env
+.venv/
+venv/
+ENV/
+env/
+
+# SQLite database files
+*.db
+*.sqlite3
+
+# dlib model (large binary, download separately)
+backend/app/cv/models/*.dat
+backend/app/cv/models/*.dat.bz2
+
+# ========================
+# Node / Frontend
+# ========================
+node_modules/
+build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# ========================
+# IDE & OS
+# ========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ========================
+# Docker
+# ========================
+.docker/
+
+# ========================
+# Secrets / credentials
+# ========================
+*.pem
+*.key
+.env.*
+!.env.example

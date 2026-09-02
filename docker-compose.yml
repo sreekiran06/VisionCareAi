@@ -1,0 +1,75 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: visioncare-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: visioncare
+      POSTGRES_PASSWORD: visioncare
+      POSTGRES_DB: visioncare
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U visioncare -d visioncare"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: visioncare-backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: development
+      SECRET_KEY: ${SECRET_KEY:-dev-secret-change-me}
+      DATABASE_URL: postgresql+psycopg2://visioncare:visioncare@db:5432/visioncare
+      CORS_ORIGINS: http://localhost:3000,http://localhost:5173
+      EAR_THRESHOLD: ${EAR_THRESHOLD:-0.21}
+      MAR_THRESHOLD: ${MAR_THRESHOLD:-0.6}
+      CONSECUTIVE_FRAMES_ALERT: ${CONSECUTIVE_FRAMES_ALERT:-15}
+      DETECTOR_MODEL_PATH: /app/app/cv/models/shape_predictor_68_face_landmarks.dat
+      NOTIFICATIONS_ENABLED: ${NOTIFICATIONS_ENABLED:-false}
+      SMTP_HOST: ${SMTP_HOST:-}
+      SMTP_PORT: ${SMTP_PORT:-587}
+      SMTP_USER: ${SMTP_USER:-}
+      SMTP_PASSWORD: ${SMTP_PASSWORD:-}
+      ALERT_EMAIL_FROM: ${ALERT_EMAIL_FROM:-}
+      TWILIO_ACCOUNT_SID: ${TWILIO_ACCOUNT_SID:-}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN:-}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER:-}
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the CV landmark model at runtime rather than baking it into the
+      # image (see backend/Dockerfile — the COPY line is commented out).
+      - ./backend/app/cv/models:/app/app/cv/models:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 30s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./visioncare-frontend
+      dockerfile: Dockerfile
+    container_name: visioncare-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    environment:
+      VITE_API_BASE_URL: http://localhost:8000/api
+      VITE_WS_BASE_URL: ws://localhost:8000/ws
+    ports:
+      - "3000:3000"
+
+volumes:
+  db_data:
