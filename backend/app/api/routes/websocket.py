@@ -198,13 +198,16 @@ async def camera_feed_websocket(
                             patient.ward_id,
                             {
                                 "type": "new_request",
+                                "id": str(detection.id),
+                                "request_id": str(detection.id),
                                 "patient_id": patient_id,
                                 "patient_name": patient.name,
                                 "bed_number": patient.bed_number,
                                 "need": need_type.value,
+                                "need_type": need_type.value,
+                                "gesture_type": gesture_type.value if hasattr(gesture_type, "value") else str(gesture_type),
                                 "confidence": confidence,
                                 "timestamp": detection.created_at.isoformat(),
-                                "request_id": str(detection.id)
                             }
                         )
                         

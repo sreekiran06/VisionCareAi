@@ -54,17 +54,17 @@ const WS_BASE_URL = getWebSocketBaseUrl();
 
 function mapDetectionToRequest(raw: any): PatientRequest {
   return {
-    id:              raw.id,
-    patientId:       raw.patient_id,
-    patientName:     raw.patient_name,
-    bedNumber:       raw.bed_number,
-    need:            raw.need_type ?? raw.need,
-    gestureType:     raw.gesture_type,
-    confidence:      raw.confidence,
-    timestamp:       new Date(raw.timestamp ?? raw.created_at),
+    id:              raw.id ?? raw.request_id ?? String(Math.random()),
+    patientId:       raw.patient_id ?? raw.patientId ?? "",
+    patientName:     raw.patient_name ?? raw.patientName ?? "Patient",
+    bedNumber:       raw.bed_number ?? raw.bedNumber ?? "",
+    need:            raw.need_type ?? raw.need ?? "nurse",
+    gestureType:     raw.gesture_type ?? raw.gestureType,
+    confidence:      raw.confidence ?? 0.9,
+    timestamp:       new Date(raw.timestamp ?? raw.created_at ?? Date.now()),
     status:          (raw.status ?? "pending") as RequestStatus,
-    acknowledgedBy:  raw.acknowledged_by,
-    responseTimeMs:  raw.response_time_ms,
+    acknowledgedBy:  raw.acknowledged_by ?? raw.acknowledgedBy,
+    responseTimeMs:  raw.response_time_ms ?? raw.responseTimeMs,
   };
 }
 
@@ -162,8 +162,14 @@ export const NurseDashboard: React.FC<NurseDashboardProps> = ({
 
   const handleAcknowledge = async (requestId: string, status: RequestStatus) => {
     setRequests((prev) => prev.map((r) => r.id === requestId ? { ...r, status } : r));
-    try { await detectionsApi.acknowledge(requestId, nurseId, status); }
-    catch { setLoadError("Failed to save that update. It may not be recorded."); }
+    try {
+      await detectionsApi.acknowledge(requestId, nurseId, status);
+      setLoadError(null);
+    } catch (err) {
+      console.warn("Could not persist acknowledgment:", err);
+      setLoadError("Failed to save that update. It may not be recorded.");
+      setTimeout(() => setLoadError(null), 4000);
+    }
   };
 
   const pendingRequests = useMemo(() => requests.filter((r) => r.status === "pending"), [requests]);
